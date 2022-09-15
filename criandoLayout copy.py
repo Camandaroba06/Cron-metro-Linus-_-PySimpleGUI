@@ -10,15 +10,20 @@ sg.theme('Black')
 
 
 sg.theme('Dark Amber')
-tab1_layout =  [[sg.T('This is inside tab 1')],[sg.Text('')],
-          [sg.Text('00:00:00', size=(8, 2), font=('Helvetica', 100),
-                justification='center', key='text')],
-          [sg.Button('Run', key='-RUN-PAUSE-', button_color=('white', '#001480')),
-           sg.Button('Reset', button_color=('white', '#007339'), key='-RESET-'),
-           sg.Exit(button_color=('white', 'firebrick4'), key='Exit')]]
+frame_layout = [[sg.CB('Equipe 1'), sg.CB('Equipe 2'), sg.CB('Equipe 3'), sg.CB('Equipe 4')],
+                [sg.Button('Run', key='-RUN-PAUSE-', button_color=('white', '#001480')),
+                sg.Button('Reset', button_color=('white', '#007339'), key='-RESET-'),
+                sg.Exit(button_color=('white', 'firebrick4'), key='Exit')]]
 
-tab2_layout = [[sg.T('This is inside tab 2')]]
-layout = [[sg.TabGroup([[sg.Tab('Tab 1', tab1_layout), sg.Tab('Tab 2', tab2_layout)]])]]
+
+tab1_layout =  [[sg.T('Cronometro')],[sg.Text('')],
+          [sg.Text('00:00:00', size=(8, 2), font=('Helvetica', 100),
+                justification='center', key='text')],[sg.Frame('My Frame Title', frame_layout, font='Any 12', title_color='blue', element_justification='c')]]
+
+
+tab2_layout = [[sg.T('Tabela com os tempos e Nome da Equipe')]]
+
+layout = [[sg.TabGroup([[sg.Tab('Cronometro', tab1_layout, element_justification='c'), sg.Tab('Tabela com os tempos e Nome da Equipe', tab2_layout, element_justification='c')]])]]
 window = sg.Window('Running Timer', layout,
                    resizable=True,
                    no_titlebar=False,
