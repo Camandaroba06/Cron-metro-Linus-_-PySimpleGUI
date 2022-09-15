@@ -77,6 +77,9 @@ while True:
     #Tendo apertar 2 vezes o botão reset(só usar caso o carro saia da pista - da para contornar o bug)        
     if event == '-RESET-':
         stopwatch.reset()
+        minutos = 0
+        segundos = 0
+        millis = 0
         run=False
         print('{:02d}:{:02d}:{:03d}'.format(minutos,segundos,millis))
 # ===========================================================================================================================

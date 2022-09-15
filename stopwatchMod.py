@@ -17,9 +17,10 @@ stopwatch.reset()
 # stopwatch.restart()  # Reset and start again
 # stopwatch.running  # Wether stopwatch is running
 # x = stopwatch.duration  # Get the duration (in seconds)
-while True:
-    stopwatch.start()
-    running = True
+running = True
+while running:
+    if running == True:
+        stopwatch.start()
     if running:
         totalSec = stopwatch.duration
         millisTotal = 1000*totalSec
@@ -32,3 +33,7 @@ while True:
             millis = millis % 1000
         print("Min: " + str(minutos) + " " + "Segundos: " +
               str(segundos)+" " + "Milisegundos: " + str(millis))
+    if(minutos == 1):
+        running = False
+        stopwatch.stop
+        stopwatch.reset()
