@@ -11,7 +11,7 @@ sg.theme('Black')
 
 sg.theme('Dark Amber')
 layout = [[sg.Text('')],
-          [sg.Text('00:00:00', size=(8, 2), font=('Helvetica', 20),
+          [sg.Text('00:00:00', size=(8, 2), font=('Helvetica', 100),
                 justification='center', key='text')],
           [sg.Button('Run', key='-RUN-PAUSE-', button_color=('white', '#001480')),
            sg.Button('Reset', button_color=('white', '#007339'), key='-RESET-'),
