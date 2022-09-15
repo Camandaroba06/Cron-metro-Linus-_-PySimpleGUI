@@ -10,7 +10,12 @@ sg.theme('Black')
 
 
 sg.theme('Dark Amber')
-frame_layout = [[sg.CB('Equipe 1'), sg.CB('Equipe 2'), sg.CB('Equipe 3'), sg.CB('Equipe 4')],
+frame_layout = [
+                [sg.T('')],
+                [sg.T('')],
+                [sg.Combo(['Equipe 1','Equipe 2','Equipe 3','Equipe 4' ])],
+                [sg.T('')],
+                [sg.T('')],
                 [sg.Button('Run', key='-RUN-PAUSE-', button_color=('white', '#001480')),
                 sg.Button('Reset', button_color=('white', '#007339'), key='-RESET-'),
                 sg.Exit(button_color=('white', 'firebrick4'), key='Exit')]]
