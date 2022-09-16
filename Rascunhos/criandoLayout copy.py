@@ -6,7 +6,7 @@ segundos = 0
 millis = 0
 stopwatch = Stopwatch(2)
 stopwatch.reset()
-sg.theme('Black')
+
 
 
 sg.theme('Dark Amber')
@@ -25,8 +25,19 @@ tab1_layout =  [[sg.T('Cronometro')],[sg.Text('')],
           [sg.Text('00:00:00', size=(8, 2), font=('Helvetica', 100),
                 justification='center', key='text')],[sg.Frame('My Frame Title', frame_layout, font='Any 12', title_color='blue', element_justification='c')]]
 
+equipeTab1_layout = [[sg.T('Aqui ficaria a tabela da equipe 1')]]
+equipeTab2_layout = [[sg.T('Aqui ficaria a tabela da equipe 2')]]
+equipeTab3_layout = [[sg.T('Aqui ficaria a tabela da equipe 3')]]
+equipeTab4_layout = [[sg.T('Aqui ficaria a tabela da equipe 4')]]
 
-tab2_layout = [[sg.T('Tabela com os tempos e Nome da Equipe')]]
+
+
+tab2_layout = [[sg.T('Tabela com os tempos e Nome da Equipe')],
+               [sg.TabGroup([[sg.Tab('Equipe 1 Table', equipeTab1_layout, element_justification='c'),
+                              sg.Tab('Equipe 2 Table', equipeTab2_layout, element_justification='c'),
+                              sg.Tab('Equipe 3 Table', equipeTab3_layout, element_justification='c'),
+                              sg.Tab('Equipe 4 Table', equipeTab4_layout, element_justification='c')]])]
+               ]
 
 layout = [[sg.TabGroup([[sg.Tab('Cronometro', tab1_layout, element_justification='c'), sg.Tab('Tabela com os tempos e Nome da Equipe', tab2_layout, element_justification='c')]])]]
 window = sg.Window('Running Timer', layout,
