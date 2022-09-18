@@ -1,15 +1,15 @@
 import PySimpleGUI as sg
 from stopwatch import Stopwatch
+import threading as th
 import serial
 # ----------------  Create Form  ----------------
 minut = 0
-minutos = 0
 segundos = 0
 millis = 0
-tEspera=0
 valorAnterior = 1
 stopwatch = Stopwatch(2)
 stopwatch.reset()
+arduino = serial.Serial("COM5", 9600, timeout=2)
 headings = ['Tempo da Equipe']
 collectInfo_Array_Equipe1 = []
 collectInfo_Array_Equipe2 = []
@@ -89,89 +89,12 @@ window = sg.Window('Linus Cronometro', layout,
                    auto_size_buttons=False,
                    keep_on_top=True,
                    grab_anywhere=True,
-                   element_padding=(80, 8),
+                   element_padding=(100, 10),
                    finalize=True,
                    element_justification='c',
                    right_click_menu=sg.MENU_RIGHT_CLICK_EDITME_EXIT)
-
-arduino = serial.Serial("COM4", 9600, timeout=0.5)
-
 run = False
-
 while True:
-
-
-#============================================ Leitura LDR + Tratamento ==============================================================================
-    valorLDR = arduino.readline()[:-2].decode()
-    aux = valorLDR.split()
-    for i in aux:
-        valorLDR = int(i)
-    print(valorLDR)
-#==========================================================================================================
-    print("Antes do if")
-    print("Anterior: {} Novo: {} Espera: {}".format(valorAnterior, valorLDR, tEspera))
-    print('{:02d}:{:02d}:{:03d}'.format(minutos,segundos,millis))
-    if (valorAnterior != -1):
-        print("entrou if 1")
-        if(valorLDR != valorAnterior):
-            print("entrou if 2")
-            if(segundos==0 and minutos == 0 and tEspera > 50):
-                print("entrou if 3")
-                if run == False:
-                    print("entrou if 4")
-                    stopwatch.start()
-                    run = True
-                    print("Era para ter começado")
-    valorAnterior = valorLDR
-    tEspera+=1
-
-    print("passou")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#============================== botões ==========================================================
 
     
 # ========================== Conversão e Leitura =================================================================================
@@ -187,14 +110,26 @@ while True:
             millis = millis % 1000
             
 # ======================================================================================================================
-    
-    
+    valorLDR = arduino.readline()         # read a byte string
+    string_n = valorLDR.decode()  # decode byte string into Unicode  
+    string = string_n.rstrip() # remove \n and \r
+    flt = int(string)        # convert string to float
+    print(flt)
+    valorLDR = flt
+    print(f"Valor do LDR:{valorLDR}")
+    if(valorLDR != valorAnterior):
+        if(segundos == 0 and minutos == 0):
+            run = True
+            stopwatch.start()
+        elif(segundos!=0):
+            stopwatch.restart()
+    valorAnterior = valorLDR
     
 # =============== Botões Funcionamento =================================================================================  
     if run:
-        event, values = window.read(timeout=10)
+        event, values = window.read(timeout = 10)
     else:
-        event, values = window.read()
+        event, values = window.read(timeout = 1)
     if event in (sg.WIN_CLOSED, 'Exit'):        # ALWAYS give a way out of program
         break
     if event == '-RUN-PAUSE-':
