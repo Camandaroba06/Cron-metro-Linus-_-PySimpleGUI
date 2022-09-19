@@ -1,11 +1,15 @@
 import PySimpleGUI as sg
 from stopwatch import Stopwatch
+import serial
 # ----------------  Create Form  ----------------
 minut = 0
 segundos = 0
 millis = 0
+valorAnterior = 1
+tespera = 0
 stopwatch = Stopwatch(2)
 stopwatch.reset()
+arduino = serial.Serial("COM5", 9600, timeout=2)
 headings = ['Tempo da Equipe']
 collectInfo_Array_Equipe1 = []
 collectInfo_Array_Equipe2 = []
@@ -13,6 +17,7 @@ collectInfo_Array_Equipe3 = []
 collectInfo_Array_Equipe4 = []
 sg.theme('Dark Amber')
 frame_layout = [
+                [sg.T('Competição Linus Bot - Equipe x', key='Equipe Title')],
                 [sg.T('')],
                 [sg.T('')],
                 [sg.Combo(['Equipe 1','Equipe 2','Equipe 3','Equipe 4'], key='combo')],
@@ -26,7 +31,7 @@ frame_layout = [
 
 tab1_layout =  [[sg.T('Cronometro')],[sg.Text('')],
           [sg.Text('00:00:000', size=(8, 2), font=('Helvetica', 100),
-                justification='center', key='text')],[sg.Frame('My Frame Title', frame_layout, font='Any 12', title_color='blue', element_justification='c')]]
+                justification='center', key='text')],[sg.Frame('Seleção de Equipe + configs', frame_layout, font='Any 12', title_color='blue', element_justification='c')]]
 
 
 tabelaEquipe1_layout = [sg.Table(values=collectInfo_Array_Equipe1,
@@ -91,8 +96,7 @@ window = sg.Window('Linus Cronometro', layout,
                    right_click_menu=sg.MENU_RIGHT_CLICK_EDITME_EXIT)
 run = False
 while True:
-    if run:
-        stopwatch.start()
+
     
 # ========================== Conversão e Leitura =================================================================================
     if True:
@@ -106,15 +110,31 @@ while True:
         if(millis >= 999):
             millis = millis % 1000
             
-# ======================================================================================================================
-    
-    
-    
-# =============== Botões Funcionamento =================================================================================  
     if run:
-        event, values = window.read(timeout=10)
+        event, values = window.read(timeout = 10)
     else:
-        event, values = window.read()
+        event, values = window.read(timeout = 1)
+# ======================================================================================================================
+    valorLDR = arduino.readline()         # read a byte string
+    string_n = valorLDR.decode()  # decode byte string into Unicode  
+    string = string_n.rstrip() # remove \n and \r
+    flt = int(string)        # convert string to float
+    print(flt)
+    valorLDR = flt
+    print(f"Valor do LDR:{valorLDR}")
+    if(valorLDR != valorAnterior):
+        if(segundos == 0 and minutos == 0):
+            run = True
+            stopwatch.start()
+        elif(segundos!=0 and tespera>200):
+            event = '-CLK-'
+            stopwatch.restart()
+            tespera = 0
+    valorAnterior = valorLDR
+    if(segundos != 0):
+        tespera+=1
+    print(tespera)
+# =============== Botões Funcionamento =================================================================================  
     if event in (sg.WIN_CLOSED, 'Exit'):        # ALWAYS give a way out of program
         break
     if event == '-RUN-PAUSE-':
@@ -126,12 +146,28 @@ while True:
             run = False
     #Tendo apertar 2 vezes o botão reset(só usar caso o carro saia da pista - da para contornar o bug)        
     if event == '-RESET-':
+        #CUIDADO COM ESSE TESPERA AQUI EM
+        tespera = 0
+        
+        
+        
+        
         stopwatch.reset()
         minutos = 0
         segundos = 0
         millis = 0
         run=False
         print('{:02d}:{:02d}:{:03d}'.format(minutos,segundos,millis))
+        
+        
+    if values['combo']=='Equipe 1':
+        window['Equipe Title'].update('Cronometro da Equipe 1!!')
+    if values['combo']=='Equipe 2':
+        window['Equipe Title'].update('Cronometro da Equipe 2!!')
+    if values['combo']=='Equipe 3':
+        window['Equipe Title'].update('Cronometro da Equipe 3!!')
+    if values['combo']=='Equipe 4':
+        window['Equipe Title'].update('Cronometro da Equipe 4!!')
 #============================================================================================================
 #==================== Evento da Seleção de Equipes ==========================================================
     if event == '-CLK-' and values['combo']=='Equipe 1':
