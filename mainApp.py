@@ -9,7 +9,7 @@ valorAnterior = 1
 tespera = 0
 stopwatch = Stopwatch(2)
 stopwatch.reset()
-arduino = serial.Serial("COM5", 9600, timeout=2)
+arduino = serial.Serial("COM3", 9600, timeout=2)
 headings = ['Tempo da Equipe']
 collectInfo_Array_Equipe1 = []
 collectInfo_Array_Equipe2 = []
@@ -17,7 +17,7 @@ collectInfo_Array_Equipe3 = []
 collectInfo_Array_Equipe4 = []
 sg.theme('Dark Amber')
 frame_layout = [
-                [sg.T('Competição Linus Bot - Equipe x', key='Equipe Title')],
+                [sg.T('Competição Linus Bot - Equipe x', key='Equipe Title', font=('Helvetica', 30))],
                 [sg.T('')],
                 [sg.T('')],
                 [sg.Combo(['Equipe 1','Equipe 2','Equipe 3','Equipe 4'], key='combo')],
@@ -29,7 +29,7 @@ frame_layout = [
                 sg.Exit(button_color=('white', 'firebrick4'), key='Exit')]]
 
 
-tab1_layout =  [[sg.T('Cronometro')],[sg.Text('')],
+tab1_layout =  [[sg.T('Cronometro', font=('Helvetica', 30))],[sg.Text('')],
           [sg.Text('00:00:000', size=(8, 2), font=('Helvetica', 100),
                 justification='center', key='text')],[sg.Frame('Seleção de Equipe + configs', frame_layout, font='Any 12', title_color='blue', element_justification='c')]]
 
