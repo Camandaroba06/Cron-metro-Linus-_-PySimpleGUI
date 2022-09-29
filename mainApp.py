@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 from stopwatch import Stopwatch
 import serial
+import autoconect as ac
 # ----------------  Create Form  ----------------
 minut = 0
 segundos = 0
@@ -9,7 +10,11 @@ valorAnterior = 1
 tespera = 0
 stopwatch = Stopwatch(2)
 stopwatch.reset()
-arduino = serial.Serial("COM3", 9600, timeout=2)
+
+foundPorts = ac.get_ports()        
+connectPort = ac.findArduino(foundPorts)
+
+arduino = serial.Serial(connectPort, 9600, timeout=2)
 headings = ['Tempo da Equipe']
 collectInfo_Array_Equipe1 = []
 collectInfo_Array_Equipe2 = []
